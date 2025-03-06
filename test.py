@@ -4,8 +4,6 @@ import csv
 import os
 from datetime import datetime
 
-#Get Items from Koolo Logs
-
 def extract_character_name(logfile_name):
     """
     Extracts the character name from the logfile name.
@@ -38,13 +36,18 @@ def extract_stashed_items(logfile_path, output_file, existing_entries):
         with open(logfile_path, 'r', encoding='utf-8') as file:
             for line in file:
                 debug_match = re.search(
-                    r'Checking if we should notify about stashing (.*?) (true|false) (\d+) (\d+) (\{.*?\}) (\{.*?\}) (true|false) (\[\]|\d+) (\[\]|\d+) (\w+)',
+                    r'Checking if we should notify about stashing (.*?) (true|false) (\w+) (\d+) (\[.*?\]) (\[.*?\]) (true|false) (\[\]|\d+) (\[\]|\d+) (\w+)',
                     previous_line
                 )
                 info_match = re.search(
                     r'time=(\d{2}:\d{2}:\d{2}).*?msg="Item (.*?) \[(.*?)\] stashed".*?nipFile="(.*?):(\d+)".*?rawRule="(.*?)"',
                     line
                 )
+                
+                #if debug_match:
+                #    print(f"Debug match found: {debug_match.groups()}", flush=True)
+                #if info_match:
+                #    print(f"Info match found: {info_match.groups()}", flush=True)
                 
                 if debug_match and info_match:
                     valid_entries_found += 1  # Logfile contains valid entries
@@ -57,7 +60,7 @@ def extract_stashed_items(logfile_path, output_file, existing_entries):
                     
                     # Extract additional attributes from the debug line
                     ethereal = debug_match.group(2).strip() == "true"
-                    quality = int(debug_match.group(3).strip())
+                    quality = debug_match.group(3).strip()
                     level_req = int(debug_match.group(4).strip())
                     base_stats = debug_match.group(5).strip()
                     stats = debug_match.group(6).strip()
@@ -67,17 +70,15 @@ def extract_stashed_items(logfile_path, output_file, existing_entries):
                     desc_type = debug_match.group(10).strip()  # Extract item type from Desc().Type
                     
                     # Use the item type from Desc().Type for runes and other items
-                    if desc_type.lower() == "rune":
-                        item_type = "Rune"
-                    else:
-                        item_type = desc_type
+                    if desc_type == "rune":
+                        quality = "Rune"
                     
                     # Combine logfile date and log timestamp
                     timestamp = f"{logfile_date} {log_time}"
                     
                     # Create a unique identifier for the entry
                     entry = (
-                        timestamp, character_name, item_name, item_type, ethereal, quality, level_req,
+                        timestamp, character_name, item_name, ethereal, quality, level_req,
                         base_stats, stats, has_sockets, sockets, unique_set_id, nip_file, line_number, raw_rule, logfile_name
                     )
                     
@@ -97,7 +98,7 @@ def extract_stashed_items(logfile_path, output_file, existing_entries):
             if not file_exists:
                 # Write header if the file is new
                 writer.writerow([
-                    "Timestamp", "Character", "Item Name", "Item Type", "Ethereal", "Quality", "Level Req",
+                    "Timestamp", "Character", "Item Name", "Ethereal", "Quality", "Level Req",
                     "Base Stats", "Stats", "Has Sockets", "Sockets", "Unique/Set ID", "Nip File", "Line Number", "Raw Rule", "Logfile"
                 ])
             writer.writerows(stashed_items)
