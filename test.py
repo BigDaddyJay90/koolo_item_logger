@@ -4,6 +4,8 @@ import csv
 import os
 from datetime import datetime
 
+//Get Items from Koolo Logs
+
 def extract_character_name(logfile_name):
     """
     Extracts the character name from the logfile name.
