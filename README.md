@@ -1,142 +1,55 @@
-Koolo Log Parser and Stash Tracker
-
-This Python script parses Koolo character log files and extracts information about stashed items. It generates a CSV file (MyStashedItems.csv) containing detailed item information, including name, type, quality, stats, and more. This tool is particularly useful for tracking collected items and analyzing your stash in Diablo 2.
-
-🚀 Features
-
-✅ Log File Parsing – Extracts item details from Diablo 2 log files.✅ CSV Output – Generates a CSV file with the following columns:
-
-Timestamp
-
-Character Name
-
-Item Name
-
-Ethereal Status
-
-Quality (Normal, Magic, Rare, Unique, Rune)
-
-Level Requirement
-
-Base Stats
-
-Additional Stats
-
-Socket Information
-
-Unique/Set ID
-
-NIP File Path
-
-Line Number in NIP File
-
-Raw Rule
-
-Logfile Name✅ Duplicate Prevention – Prevents duplicate entries in the CSV file.✅ Folder Support – Process multiple log files by dragging and dropping a folder onto the script.✅ Cross-Platform – Works on Windows, macOS, and Linux.
-
-📌 How It Works
-
-The script reads Diablo 2 log files, scans for debug and info messages related to stashed items, extracts relevant data, and writes it to a CSV file. Duplicate entries are handled, ensuring clean data in the output.
-
-🛠 Usage
-
-Prerequisites
-
-Python 3.x installed
-
-No additional dependencies (uses built-in libraries)
-
-🔧 Running the Script
-
-Clone the Repository:
-
-git clone https://github.com/your-username/diablo2-log-parser.git
-cd diablo2-log-parser
-
-Run the Script:
-Drag and drop a log file or folder onto the script (if compiled as an executable), or run from the command line:
-
-python script.py path/to/logfile.txt
-
-Or for a folder:
-
-python script.py path/to/folder
-
-Output:
-
-Generates a CSV file named MyStashedItems.csv in the script directory.
-
-Contains extracted item information.
-
-📦 Compiling to an Executable
-
-To create an executable for easier use:
-
-Install pyinstaller:
-
-pip install pyinstaller
-
-Compile the script:
-
-pyinstaller --onefile --console script.py
-
-The executable will be located in the dist folder.
-
-📜 Example Log Entry
-
-time=21:03:45 level=DEBUG msg="Checking if we should notify about stashing GrandCharm false 4 42 [] [40% Extra Gold from Monsters +1 to Fire Skills (Sorceress only) Required Level: 42] false [] 0 lcha"
-time=21:03:45 level=INFO msg="Item Grand Charm [Magic] stashed" nipFile="C:\path\to\pickit\magic.nip:2" rawRule="[name] == grandcharm && [quality] == magic # [fireskilltab] >= 1"
-
-📊 Example CSV Output
-
-Timestamp
-
-Character
-
-Item Name
-
-Ethereal
-
-Quality
-
-Level Req
-
-Stats
-
-Has Sockets
-
-Unique/Set ID
-
-NIP File
-
-Raw Rule
-
-2025-03-01 12:55:14
-
-Frosti-tute
-
-Grand Charm
-
-false
-
-Magic
-
-42
-
-40% Extra Gold...
-
-false
-
-0
-
-C:\path\to\pickit\magic.nip
-
-[name] == grandcharm && [quality] == magic # [fireskilltab] >= 1
-
-🤝 Contributing
-
-Contributions are welcome! Feel free to open an issue or submit a pull request with suggestions, bug reports, or feature requests.
-
-📜 License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
+# Logfile Parser and Stashed Items Extractor
+
+This Python script parses Koolo logfiles to extract stashed item details. It processes logfiles, avoids duplicates, and saves data to a CSV file.
+
+## Features
+- **Logfile Parsing**: Extracts character names and item details.
+- **Duplicate Prevention**: Skips existing entries in the CSV.
+- **CSV Export**: Saves data to `MyStashedItems.csv`.
+- **Batch Processing**: Handles single files or entire folders.
+
+## Requirements
+- Python 3.x
+- Packages: `re`, `csv`, `os`, `datetime` (included in Python’s standard library).
+
+## Usage
+
+### 1. Process a Single Logfile
+Drag-and-drop the logfile onto the script or run:  
+`python test.py "path/to/logfile.txt"`
+
+### 2. Process a Folder of Logfiles
+Provide the folder path:  
+`python test.py "path/to/logfiles_folder"`
+
+### 3. Output File (`MyStashedItems.csv`)
+The CSV includes these columns:
+- **Timestamp**: Date/time of the stash action.
+- **Character**: Character name (extracted from the logfile name).
+- **Item Name**: Name of the stashed item.
+- **Ethereal**: `true`/`false` if the item is ethereal.
+- **Quality**: Item quality (e.g., Rune, Magic).
+- **Level Req**: Required level to use the item.
+- **Base Stats**: Base stats of the item (JSON array).
+- **Stats**: Additional stats (JSON array).
+- **Has Sockets**: `true`/`false` if the item has sockets.
+- **Sockets**: Number of sockets (e.g., `[3]`).
+- **Unique/Set ID**: ID for unique/set items.
+- **Nip File**: Path to the `.nip` rule file.
+- **Line Number**: Line number in the `.nip` file.
+- **Raw Rule**: The rule that triggered the stash.
+- **Logfile**: Source logfile name.
+
+## How It Works
+1. **Extract Character Name**: Uses regex to parse the logfile name.
+2. **Parse Log Entries**: Matches debug and info lines to extract item details.
+3. **Avoid Duplicates**: Checks against existing CSV entries.
+4. **Save to CSV**: Appends new entries to `MyStashedItems.csv`.
+
+## Example Logfile Format
+Logfiles are expected to have names like:  
+`Supervisor-log-charactername-year-month-day-hh-mm-ss.txt`
+
+## Notes
+- The script waits for user input before exiting (useful for standalone executables).
+- Errors (e.g., missing files) are logged to the console.
