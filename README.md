@@ -1,3 +1,7 @@
+#INFO: Right now, this only works with: https://github.com/Timmynat0r/koolo/tree/companion%2Bleveling
+I hade to make changes to the Logging function in: stash.go
+
+
 # Logfile Parser and Stashed Items Extractor
 
 This Python script parses Koolo logfiles to extract stashed item details. It processes logfiles, avoids duplicates, and saves data to a CSV file.
