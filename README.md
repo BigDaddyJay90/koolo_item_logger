@@ -2,12 +2,13 @@
 
 This line has to be edited like this:
 
+```
 ctx.Logger.Debug(fmt.Sprintf("Checking if we should notify about stashing %v %t %v %v %v %v %v %v %v %v", i.Name, i.Ethereal, i.Quality.ToString(), i.LevelReq, i.BaseStats, i.Stats, i.HasSockets, i.Sockets, i.UniqueSetID, i.Desc().Type))
     // Don't notify about gems
     if strings.Contains(i.Desc().Type, "gem") {
         return false
     }
-
+```
 
 # Logfile Parser and Stashed Items Extractor
 
