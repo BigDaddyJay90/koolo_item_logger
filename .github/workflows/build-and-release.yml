@@ -27,7 +27,7 @@ jobs:
         run: pyinstaller --onefile log_parser.py  # Replace 'your_script.py' with your actual script name
 
       - name: Archive executable
-        run: zip -j build_executable.zip dist/log_parser.exe  # Replace 'your_script' with the name of the built executable
+        run: zip -j build_executable.zip /home/runner/work/koolo_item_logger/koolo_item_logger/dist/log_parser.exe  # Replace 'your_script' with the name of the built executable
 
   release:
     needs: build
