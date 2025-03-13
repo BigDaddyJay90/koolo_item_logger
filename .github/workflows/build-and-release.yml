@@ -1,74 +1,59 @@
-name: Build and Release Windows Executable
+name: Release Python Script as EXE
 
 on:
   push:
     tags:
-      - 'v*'
+      - 'v*' # Trigger workflow when a tag starting with 'v' is pushed (e.g., v1.0.0)
 
 jobs:
   build:
-    runs-on: windows-latest  # Use a Windows runner
+    runs-on: windows-latest # Use a Windows runner to create .exe files
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
-          python-version: '3.9'  # Specify your Python version
+          python-version: '3.9' # Use the Python version your script requires
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pyinstaller
+          pip install pyinstaller # Install PyInstaller to create the .exe
 
-      - name: Build Windows executable
-        run: pyinstaller --onefile log_parser.py  # Replace 'log_parser.py' with your actual script name
-
-      - name: Verify built files
+      - name: Create EXE using PyInstaller
         run: |
-          dir dist\
-          dir README.md
+          pyinstaller --onefile log_parser.py # Convert script to a single .exe file
 
-      - name: Archive executable and README.md
+      - name: Zip EXE and README.md
         run: |
-          Compress-Archive -Path dist\log_parser.exe, README.md -DestinationPath build_executable.zip  # Zip the .exe and README.md
+          Compress-Archive -Path dist\log_parser.exe, README.md -DestinationPath log_parser_release.zip
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
+      - name: Upload release asset
+        uses: actions/upload-artifact@v3
         with:
-          name: build_executable.zip
-          path: build_executable.zip
+          name: log_parser_release.zip
+          path: log_parser_release.zip
 
-  release:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: build_executable.zip
-          path: .
-
-      - name: Create Release
+      - name: Create GitHub Release
         id: create_release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub token for authentication
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
-          body: |
-            Release notes for ${{ github.ref }}
           draft: false
           prerelease: false
 
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build_executable.zip
-          asset_name: build_executable.zip
+          asset_path: log_parser_release.zip
+          asset_name: log_parser_release.zip
           asset_content_type: application/zip
