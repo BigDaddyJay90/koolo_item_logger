@@ -84,6 +84,10 @@ def extract_stashed_items(logfile_path, output_file, existing_entries):
                     # Use the item type from Desc().Type for runes and other items
                     if desc_type == "rune":
                         quality = "Rune"
+
+                    # Skip item type gem
+                    if "gem" in desc_type: 
+                        break
                     
                     # Combine logfile date and log timestamp
                     timestamp = f"{logfile_date} {log_time}"
