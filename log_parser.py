@@ -87,7 +87,7 @@ def extract_stashed_items(logfile_path, output_file, existing_entries):
 
                     # Skip item type gem
                     if "gem" in desc_type: 
-                        break
+                        continue
                     
                     # Combine logfile date and log timestamp
                     timestamp = f"{logfile_date} {log_time}"
