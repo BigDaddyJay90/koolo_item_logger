@@ -32,7 +32,7 @@ jobs:
           ls README.md
 
       - name: Archive executable and README.md
-        run: zip -j build_executable.zip dist/log_parser README.md  # Replace 'log_parser' with the name of the built executable
+        run: zip -j build_executable.zip dist/log_parser README.md  # Replace 'log_parser.exe' with the name of the built executable
 
   release:
     needs: build
@@ -42,10 +42,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            Release notes for ${{ github.ref }}
+          draft: false
+          prerelease: false
+
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
         with:
-          upload_url: ${{ github.event.release.upload_url }}
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./build_executable.zip
           asset_name: build_executable.zip
           asset_content_type: application/zip
