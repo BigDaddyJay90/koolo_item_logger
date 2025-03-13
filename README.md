@@ -1,4 +1,4 @@
-#INFO: Right now, this only works with an edited version of stash.go
+#INFO: Right now, this only works with an edited version of koolo/internal/action/stash.go
 
 This line has to be edited like this:
 
