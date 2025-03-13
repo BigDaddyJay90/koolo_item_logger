@@ -31,12 +31,6 @@ jobs:
         run: |
           Compress-Archive -Path dist\log_parser.exe, README.md -DestinationPath log_parser_release.zip
 
-      - name: Upload release asset
-        uses: actions/upload-artifact@v3
-        with:
-          name: log_parser_release.zip
-          path: log_parser_release.zip
-
       - name: Create GitHub Release
         id: create_release
         uses: actions/create-release@v1
