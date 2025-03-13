@@ -36,11 +36,16 @@ def extract_stashed_items(logfile_path, output_file, existing_entries):
         with open(logfile_path, 'r', encoding='utf-8') as file:
             for line in file:
                 if re.search(
-                    r'Checking if we should notify about stashing (.*?) (\(.*?\))',
+                    r'Checking if we should notify about stashing (.*?) (\{.*?\})',
                     line
                 ) is not None:
                     print(f"Found old log file line. Please check if you changed the code in the stash.go file in your bot. Refer to README file.")
-                    sys.exit()
+                    # Cross-platform "Press any key to continue"
+                    if os.name == 'nt':  # Windows
+                        os.system('pause')
+                    else:  # Unix-based systems
+                        input("Press Enter to exit...")
+                    sys.exit(1)
 
                 debug_match = re.search(
                     r'Checking if we should notify about stashing (.*?) (true|false) (\w+) (\d+) (\[.*?\]) (\[.*?\]) (true|false) (\[\]|\d+) (\[\]|\d+) (\w+)',
