@@ -40,7 +40,7 @@ def extract_stashed_items(logfile_path, output_file, existing_entries):
                     previous_line
                 )
                 info_match = re.search(
-                    r'time=(\d{2}:\d{2}:\d{2}).*?msg="Item (.*?) \[(.*?)\] stashed".*?nipFile=(.*?):(\d+).*?rawRule="(.*?)"',
+                    r'time=(\d{2}:\d{2}:\d{2}).*?msg="Item (.*?) \[(.*?)\] stashed".*?nipFile="?(.*?):(\d+).*?rawRule="(.*?)"',
                     line
                 )
                 
