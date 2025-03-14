@@ -71,12 +71,12 @@ def extract_stashed_items(logfile_path, output_file, existing_entries):
                     raw_rule = info_match.group(6).strip()  # Extract raw rule
                     
                     # Extract additional attributes from the debug line
-                    ethereal = debug_match.group(2).strip() == "true"
+                    ethereal = debug_match.group(2).strip()
                     quality = debug_match.group(3).strip()
-                    level_req = int(debug_match.group(4).strip())
+                    level_req = debug_match.group(4).strip()
                     base_stats = debug_match.group(5).strip()
                     stats = debug_match.group(6).strip()
-                    has_sockets = debug_match.group(7).strip() == "true"
+                    has_sockets = debug_match.group(7).strip()
                     sockets = debug_match.group(8).strip()
                     unique_set_id = debug_match.group(9).strip()
                     desc_type = debug_match.group(10).strip()  # Extract item type from Desc().Type

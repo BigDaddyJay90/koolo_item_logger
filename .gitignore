@@ -180,3 +180,6 @@ poetry.toml
 pyrightconfig.json
 
 # End of https://www.toptal.com/developers/gitignore/api/python
+.vscode/launch.json
+log_parser_debug.py
+better_build_debug.bat
