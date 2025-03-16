@@ -190,4 +190,4 @@ def close_terminal_after_delay(seconds):
 if __name__ == "__main__":
     main()
 
-    close_terminal_after_delay(5)
+    close_terminal_after_delay(15)

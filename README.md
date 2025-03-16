@@ -28,11 +28,11 @@ This Python script parses Koolo logfiles to extract stashed item details. It pro
 
 ### 1. Process a Single Logfile
 Drag-and-drop the logfile onto the script or run:  
-`python test.py "path/to/logfile.txt"`
+`python log_parser.py "path/to/logfile.txt"`
 
 ### 2. Process a Folder of Logfiles
 Provide the folder path:  
-`python test.py "path/to/logfiles_folder"`
+`python log_parser.py "path/to/logfiles_folder"`
 
 ### 3. Output File (`MyStashedItems.csv`)
 The CSV includes these columns:
@@ -63,5 +63,5 @@ Logfiles are expected to have names like:
 `Supervisor-log-charactername-year-month-day-hh-mm-ss.txt`
 
 ## Notes
-- The script waits for user input before exiting (useful for standalone executables).
 - Errors (e.g., missing files) are logged to the console.
+- The script will auto exit terminal after a fixed time.
