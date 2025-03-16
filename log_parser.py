@@ -2,6 +2,7 @@ import re
 import sys
 import csv
 import os
+import time
 from datetime import datetime
 
 def extract_character_name(logfile_name):
@@ -173,15 +174,20 @@ def main():
             else:
                 print(f"Error: {path} is neither a file nor a folder.", flush=True)
         
-        # Wait for user input (cross-platform)
-        if sys.stdin is not None and sys.stdin.isatty():
-            input("Press Enter to exit...")  # Wait for input only in the console
-        else:
-            # Cross-platform "Press any key to continue"
-            if os.name == 'nt':  # Windows
-                os.system('pause')
-            else:  # Unix-based systems
-                input("Press Enter to exit...")
+def close_terminal_after_delay(seconds):
+    # Display the message
+    print(f"The terminal will close in {seconds} seconds...")
+    
+    # Wait for the specified number of seconds
+    time.sleep(seconds)
+    
+    # Close the terminal
+    if os.name == 'nt':  # Windows
+        os.system('exit')
+    else:  # Unix-based systems
+        os.system('kill -9 $PPID')  # Kill the parent process
 
 if __name__ == "__main__":
     main()
+
+    close_terminal_after_delay(5)
