@@ -1,6 +1,17 @@
-#INFO: Right now, this only works with an edited version of koolo/internal/action/stash.go
+<ins>**#INFO: Right now, this only works with an edited version of koolo/internal/action/stash.go**<ins>
 
-This line has to be edited like this:
+
+Original Lines:
+```
+ctx.Logger.Debug(fmt.Sprintf("Checking if we should notify about stashing %s %v", i.Name, i.Desc()))
+	// Don't notify about gems
+	if strings.Contains(i.Desc().Type, "gem") {
+		return false
+	}
+
+````
+
+Updated Lines needed for the Logging Tool:
 
 ```
 ctx.Logger.Debug(fmt.Sprintf("Checking if we should notify about stashing %v %t %v %v %v %v %v %v %v %v", i.Name, i.Ethereal, i.Quality.ToString(), i.LevelReq, i.BaseStats, i.Stats, i.HasSockets, i.Sockets, i.UniqueSetID, i.Desc().Type))
@@ -20,7 +31,7 @@ This Python script parses Koolo logfiles to extract stashed item details. It pro
 - **CSV Export**: Saves data to `MyStashedItems.csv`.
 - **Batch Processing**: Handles single files or entire folders.
 
-## Requirements
+## Requirements for building from source
 - Python 3.x
 - Packages: `re`, `csv`, `os`, `datetime` (included in Python’s standard library).
 
@@ -31,7 +42,7 @@ Drag-and-drop the logfile onto the script or run:
 `python log_parser.py "path/to/logfile.txt"`
 
 ### 2. Process a Folder of Logfiles
-Provide the folder path:  
+Drag-and-drop the Folder onto the script or run:
 `python log_parser.py "path/to/logfiles_folder"`
 
 ### 3. Output File (`MyStashedItems.csv`)
