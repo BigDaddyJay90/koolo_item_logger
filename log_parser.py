@@ -158,13 +158,16 @@ def process_folder(folder_path, output_file, existing_entries):
 
 def load_existing_entries(output_file_path, existing_entries):
     # Load existing entries from the output file (if it exists)
-        if os.path.isfile(output_file_path):
-            print(f"Loading existing entries from {output_file_path}...", flush=True)
-            with open(output_file_path, 'r', encoding='utf-8') as out_file:
-                reader = csv.reader(out_file)
-                next(reader, None)  # Skip header
-                for row in reader:
-                    existing_entries.add(tuple(row))  # Add each row as a tuple to the set
+    if os.path.isfile(output_file_path):
+        print(f"Loading existing entries from {output_file_path}...", flush=True)
+        with open(output_file_path, 'r', encoding='utf-8') as out_file:
+            reader = csv.reader(out_file)
+            next(reader, None)  # Skip header
+            for row in reader:
+                existing_entries.add(tuple(row))  # Add each row as a tuple to the set
+    
+    return existing_entries
+    
 
 def get_output_file_path():
     # Get the directory where the executable is located
