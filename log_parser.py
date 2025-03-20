@@ -3,7 +3,7 @@ import sys
 import csv
 import os
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 
 def check_for_old_log_line(line):
     if re.search(
@@ -28,8 +28,7 @@ def extract_character_name(logfile_name):
         return match.group(1).strip()
     return "Unknown"
 
-def build_entry(debug_match, info_match, logfile_path):
-    log_time = info_match.group(1).strip()  # Extract log timestamp
+def build_entry(debug_match, info_match, logfile_path, timestamp):
     item_name = info_match.group(2).strip()  # Extract item name
     item_type = info_match.group(3).strip()  # Extract item type
     nip_file = info_match.group(4).strip()  # Extract .nip file path
@@ -50,11 +49,6 @@ def build_entry(debug_match, info_match, logfile_path):
     # Use the item type from Desc().Type for runes and other items
     if desc_type == "rune":
         quality = "Rune"
-    
-    # Get the last modified date of the logfile
-    logfile_date = datetime.fromtimestamp(os.path.getmtime(logfile_path)).strftime("%Y-%m-%d")
-    # Combine logfile date and log timestamp
-    timestamp = f"{logfile_date} {log_time}"
 
     # Extract logfile_name from logfile_path
     logfile_name = os.path.basename(logfile_path)
@@ -98,7 +92,10 @@ def extract_stashed_items(logfile_path, output_file, existing_entries):
             return
         
         with open(logfile_path, 'r', encoding='utf-8') as file:
+            previous_date = datetime.fromtimestamp(os.path.getctime(logfile_path)).date()
             for line in file:
+                if line.strip() == "":
+                    continue
                 check_for_old_log_line(line)
 
                 debug_match = re.search(
@@ -114,11 +111,22 @@ def extract_stashed_items(logfile_path, output_file, existing_entries):
                 #    print(f"Debug match found: {debug_match.groups()}", flush=True)
                 #if info_match:
                 #    print(f"Info match found: {info_match.groups()}", flush=True)
-                
+                log_time_str = re.search(r'time=(\d{2}:\d{2}:\d{2})', line).group(1).strip()
+                log_time = datetime.strptime(log_time_str, "%H:%M:%S").time()
+                    
+                # Check if the time goes from 23:59 to 00:00
+                if log_time and previous_line:
+                    previous_log_time_str = re.search(r'time=(\d{2}:\d{2}:\d{2})', previous_line).group(1).strip()
+                    previous_log_time = datetime.strptime(previous_log_time_str, "%H:%M:%S").time()
+                    if previous_log_time > log_time:
+                        previous_date += timedelta(days=1)
+                    
+                timestamp = datetime.combine(previous_date, log_time).strftime("%Y-%m-%d %H:%M:%S")       
+
                 if debug_match and info_match:
                     valid_entries_found += 1
-                    
-                    entry = build_entry(debug_match, info_match, logfile_path)
+                       
+                    entry = build_entry(debug_match, info_match, logfile_path, timestamp)
                     
                     # Skip item type gem
                     if entry == "gem":
