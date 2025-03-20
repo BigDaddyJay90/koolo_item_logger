@@ -42,7 +42,7 @@ Drag-and-drop the logfile onto the script or run:
 `python log_parser.py "path/to/logfile.txt"`
 
 ### 2. Process a Folder of Logfiles
-Drag-and-drop the Folder onto the script or run:
+Drag-and-drop the Folder onto the script or run:  
 `python log_parser.py "path/to/logfiles_folder"`
 
 ### 3. Output File (`MyStashedItems.csv`)
