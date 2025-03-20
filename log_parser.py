@@ -116,6 +116,8 @@ def extract_stashed_items(logfile_path, output_file, existing_entries):
                 #    print(f"Info match found: {info_match.groups()}", flush=True)
                 
                 if debug_match and info_match:
+                    valid_entries_found += 1
+                    
                     entry = build_entry(debug_match, info_match, logfile_path)
                     
                     # Skip item type gem
